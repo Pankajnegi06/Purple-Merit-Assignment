@@ -1,0 +1,42 @@
+services:
+  server:
+    build: ./server
+    container_name: pm-server
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./server/.env
+    depends_on:
+      - mongo
+    networks:
+      - pm-network
+
+  client:
+    build: ./client
+    container_name: pm-client
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - server
+    networks:
+      - pm-network
+
+  mongo:
+    image: mongo:7
+    container_name: pm-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - pm-network
+
+volumes:
+  mongo-data:
+
+networks:
+  pm-network:
+    driver: bridge
