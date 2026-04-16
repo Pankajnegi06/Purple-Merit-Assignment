@@ -76,6 +76,30 @@ purplemerit/
         └── pages/         # Login, Dashboard, UserList, UserForm, UserDetail, Profile
 ```
 
+## Docker Deployment
+
+Run the entire stack with Docker Compose:
+
+```bash
+# Make sure server/.env exists with a valid MONGODB_URI
+# For Docker, use: MONGODB_URI=mongodb://mongo:27017/purplemerit
+
+docker-compose up --build
+```
+
+This starts three containers:
+- **pm-client** — React app served via nginx on port 80
+- **pm-server** — Express API on port 5000
+- **pm-mongo** — MongoDB on port 27017
+
+After containers are up, seed the database:
+
+```bash
+docker exec pm-server node src/seed.js
+```
+
+Open [http://localhost](http://localhost) in your browser.
+
 ## Environment Variables
 
 Create a `.env` file inside `server/` with:
